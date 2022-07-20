@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #contenedor{
+            display:flex;
+            flex-direction: column;
+            align-items: center;
+            /*background-color: blueviolet;*/
+            width: 100%;
+        }
+        #botones_dados{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            margin: 30px auto 0 auto;
+            width:60%;
+            /*border: 1px solid black;*/
+        }
+        #boton_1{
+            display:flex;
+            flex-direction: column  ;
+            align-items: center;
+          
+            width:70%;
+            /*border: 1px solid black;*/
+            text-align: center;
+        }
+        #boton_2{
+            display:flex;
+            flex-direction: column;
+            align-items: center;
+
+            width:70%;
+            /*border: 1px solid black;*/
+            text-align: center;
+        }
+        #jugador_1{
+            margin: 10px 0 10px 0;
+            width:50%
+        }
+        #jugador_2{
+            margin: 10px 0 10px 0;
+            width:50%
+        }
+        #horizontal{
+            width: 60%;
+            /*border: 1px solid black;*/
+            margin-top: 40px;
+        }
+        
+        #botones_partida{
+            width: 60%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            /*border: 1px solid black;*/
+            margin: 50px 0 20px 0;
+        }
+        #iniciar_partida{
+            margin: 10px 0 10px 0;
+            width:75%;
+        }
+        #comprobar_ganador{
+            margin: 10px 0 10px 0;
+            width:75%;
+        }
+        hr {
+            border-top: 2px solid #999; 
+            /*border-bottom: 2px solid #333;*/
+            height:0;
+            width:75%;
+        }
+    </style>
+</head>
+<body>
+    <div id="contenedor">
+        <div id="botones_dados">
+            <div id="boton_1">
+                <button onclick="f_tirada_jugador(boton_jugador1,imagen_dado1)" id="jugador_1" type="button" value="jugador 1" disabled >Jugador 1 </button>
+                <img id = "imagen_dado1" src="" alt="">
+              
+            </div>
+            <div id="boton_2">
+                <button  onclick="f_tirada_jugador(boton_jugador2,imagen_dado2)" id="jugador_2" type="button" value="jugador 2" disabled>Jugador 2 </button>
+                <img id = "imagen_dado2" src="" alt="">
+            </div>
+        </div>
+
+        <div id="horizontal">
+            <hr>
+        </div>
+        <h4 id="texto"  style="color:blue">Resultado!</h4>
+
+        <div id="botones_partida">
+            <input onclick="f_comprobar_ganador()" id="comprobar_ganador"type="button" value="Comprobar ganador" disabled >
+            <input onclick="f_iniciar_partida()"  id="iniciar_partida" type="button" value="Iniciar partida" >
+        </div>
+
+        <div id="botones_dados">
+            <div id="">
+               <p>Jugador 1</p>
+                <div id = "star_play1"></div>
+              
+            </div>
+            <div id="">
+                <p>Jugador 2</p>
+                <div id = "star_play2"></div>
+
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    var star = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
+  <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+</svg>`;
+
+
+    var boton_jugador1 = document.getElementById("jugador_1");
+    var boton_jugador2 = document.getElementById("jugador_2");
+
+    var imagen_dado1 = document.getElementById("imagen_dado1");
+    var imagen_dado2 = document.getElementById("imagen_dado2");
+
+    var resultado_final = document.getElementById("texto");
+
+    var comprobar_ganador = document.getElementById("comprobar_ganador");
+
+    var dado1_resultado = 0;
+
+    var star_jugador1 = document.getElementById("star_play1");
+    var star_jugador2 = document.getElementById("star_play2");
+
+    var cinco_estrellas = "";
+    var cuatro_estrellas = "";
+    var tres_estrellas = "";
+    var dos_estrellas = "";
+
+    var desabilitar_iniciar_partida = document.getElementById("iniciar_partida");
+
+    var array_jugador1 = [];
+    var array_jugador2 = [];
+
+   
+        function cinco_estrellas5(){
+            cinco_estrellas = "";
+            var contador = 1;
+            while(contador <= 5){
+                cinco_estrellas +=star;
+                contador++;
+            }
+        }
+
+        function cuatro_estrellas4(){
+            cuatro_estrellas = "";
+            var contador = 1;
+            while(contador <= 4){
+                cuatro_estrellas +=star;
+                contador++;
+            }
+        }
+
+        function tres_estrellas3(){
+            tres_estrellas = "";
+            var contador = 1;
+            while(contador <= 3){
+                tres_estrellas +=star;
+                contador++;
+            }
+        }
+
+        function dos_estrellas2(){
+            dos_estrellas = "";
+            var contador = 1;
+            while(contador <= 2){
+                dos_estrellas +=star;
+                contador++;
+            }
+        }
+
+        function partida_terminada(){
+            if (array_jugador1.length == 5 || array_jugador2.length == 5){
+                desabilitar_iniciar_partida.disabled= true;
+            }
+        }
+
+        function  f_iniciar_partida(){
+            boton_jugador1.disabled = false;
+            boton_jugador2.disabled = false;
+            imagen_dado1.src = "";
+            imagen_dado2.src = "";
+            dado1_resultado = 0;
+            boton_jugador1.value = "jugador 1";
+            boton_jugador2.value = "jugador 2"
+        
+            resultado_final.innerHTML = "Resultado!";
+        }
+
+        function f_tirada_jugador(jugador, imagen){
+            dado1_resultado = Math.floor(Math.random()*6)+1;
+            console.log(dado1_resultado);
+            jugador.disabled = true;
+            jugador.value = dado1_resultado;
+            imagen.src = "dado_" + dado1_resultado + ".png",
+            habilitar_boton_ganador_final();
+           
+        }
+
+        function habilitar_boton_ganador_final(){
+            if ((boton_jugador1.disabled == true) && (boton_jugador2.disabled == true) ){   
+                    comprobar_ganador.disabled = false;
+                }
+        }
+
+        function f_comprobar_ganador(){
+            if (boton_jugador1.value > boton_jugador2.value){
+                resultado_final.innerHTML = "Jugador1 Campeón!"
+                comprobar_ganador.disabled = true;
+                array_jugador1.push("win");
+                console.log(array_jugador1);
+                if (array_jugador1.length == 1){
+                    star_jugador1.innerHTML = star;
+                }
+                if (array_jugador1.length == 2){
+                    dos_estrellas2();
+                    star_jugador1.innerHTML = dos_estrellas;
+                    
+                }
+                if (array_jugador1.length == 3){
+                    tres_estrellas3();
+                    star_jugador1.innerHTML = tres_estrellas;
+                    
+                }
+                if (array_jugador1.length == 4){
+                    cuatro_estrellas4();
+                    star_jugador1.innerHTML = cuatro_estrellas;
+                    
+                }
+                if (array_jugador1.length == 5){
+                    cinco_estrellas5();
+                    star_jugador1.innerHTML = cinco_estrellas;
+                    partida_terminada();
+                }
+
+            }
+            else if (boton_jugador1.value < boton_jugador2.value){
+                resultado_final.innerHTML = "Jugador2 Campeón!";
+                comprobar_ganador.disabled = true;
+                array_jugador2.push("win");
+                console.log(array_jugador2);
+
+                switch (array_jugador2.length){
+                    case 1:
+                    star_jugador2.innerHTML = star;
+                    break;
+
+                    case 2:
+                    dos_estrellas2();
+                    star_jugador2.innerHTML = dos_estrellas;
+                    break;
+
+                    case 3:
+                    tres_estrellas3();
+                    star_jugador2.innerHTML = tres_estrellas;
+                    break;
+
+                    case 4:
+                    cuatro_estrellas4();
+                    star_jugador2.innerHTML = cuatro_estrellas;
+                    break;
+
+                    case 5:
+                    cinco_estrellas5();
+                    star_jugador2.innerHTML = cinco_estrellas;
+                    partida_terminada();
+                    break;
+                }
+
+            }
+            else if (boton_jugador1.value == boton_jugador2.value){
+                resultado_final.innerHTML = "tenemos empate, Señores!!!";
+                comprobar_ganador.disabled = true;
+            }
+        }
+
+</script>
+</html>
